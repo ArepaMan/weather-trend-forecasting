@@ -14,10 +14,13 @@ Analysis and forecasting on the Kaggle [**Global Weather Repository**](https://w
 | **EDA** | Seasonal Kyiv temp (~−21°C to ~37°C); spiky precipitation; ~daily sampling with small timing gaps |
 | **Models (80/20 time split)** | Naive MAE 2.509°C · Seasonal-365 MAE 5.993°C · Ridge (lags) MAE **2.474°C** · Ensemble (Ridge+naive) MAE 2.474°C |
 | **Advanced** | 9 robust-z anomalies; 18 Isolation Forest outliers; lag_1 dominates Ridge coefs; temp↔ozone r≈0.54 (Kyiv) |
+| **Inference (nb04)** | DJF winter OLS + Welch tests; Ridge holdout MAE **2.474°C** bootstrap 95% CI **[2.12, 2.91]**; weather OLS R²≈0.63; ADF non-stationary; Ljung–Box on residuals *p*≈0.02 (lag 10) |
 
 Full narrative, metrics, and report bullets: [`reports/REPORT_NOTES.md`](reports/REPORT_NOTES.md).
 
 Assessment requirements: [`docs/ASSESSMENT.md`](docs/ASSESSMENT.md).
+
+Portfolio case study and figure sync: [`docs/PORTFOLIO.md`](docs/PORTFOLIO.md).
 
 ---
 
@@ -31,7 +34,8 @@ weather-trend-forecasting/
 │   01_cleaning_and_eda.ipynb
 │   02_forecasting.ipynb
 │   03_advanced_analyses.ipynb
-├── reports/               # Figures + REPORT_NOTES.md (+ your slide export)
+│   04_statistical_inference.ipynb
+├── reports/               # Figures + REPORT.md (+ slide export)
 ├── requirements.txt
 └── README.md
 ```
@@ -91,6 +95,9 @@ Run in order; select kernel **Python (weather-assessment)**:
 1. **`notebooks/01_cleaning_and_eda.ipynb`** — load, clean, Kyiv EDA, temp/precip plots  
 2. **`notebooks/02_forecasting.ipynb`** — train/test split, naive / seasonal / Ridge, ensemble, metrics  
 3. **`notebooks/03_advanced_analyses.ipynb`** — anomalies, feature importance, air quality, geo charts  
+4. **`notebooks/04_statistical_inference.ipynb`** — winter hypothesis tests, bootstrap MAE CI, weather OLS, ADF/ACF/PACF, Ljung–Box on Ridge residuals  
+
+Guide for notebook 04: [`docs/GUIDE_04_STATISTICAL_INFERENCE.md`](docs/GUIDE_04_STATISTICAL_INFERENCE.md).
 
 Figures are written to `reports/` when you run the savefig cells.
 
@@ -102,7 +109,8 @@ Figures are written to `reports/` when you run the savefig cells.
 - **Forecasting:** Chronological 80/20 split; **one-step-ahead** holdout; naive; seasonal naive = value **365 rows back** (calendar date within ~1 day on holdout—still loses to weather variability + observation-hour drift); Ridge on lags `[1,2,3,7,14,28]`; ensemble = unweighted mean of Ridge + naive (lowest MAE pair).
 - **Metrics:** MAE and RMSE on holdout `temperature_celsius` (°C).
 - **Anomalies:** Rolling 30-day median/MAD robust z (threshold 3.5); Isolation Forest on temp + precip (2% contamination).
-- **Limitations:** Kyiv observation-hour drift; Kyiv 2026-08-17 test-window snapshot; country means use **≥100 rows/country**; mixed-language labels; correlations ≠ causation.
+- **Statistical inference (nb04):** Welch / OLS on DJF winters with hour controls; bootstrap percentile CI for holdout Ridge MAE; multivariate OLS (`humidity`, `pressure_mb`, `wind_kph`, `precip_mm`); ADF/ACF/PACF on levels; `acorr_ljungbox` on holdout one-step Ridge residuals (`scipy`, `statsmodels`).
+- **Limitations:** Kyiv observation-hour drift; Kyiv 2026-08-17 test-window snapshot; country means use **≥100 rows/country**; mixed-language labels; correlations ≠ causation; time-ordered rows violate i.i.d. OLS assumptions (Durbin–Watson ≈ 0.5 in weather OLS).
 
 ---
 

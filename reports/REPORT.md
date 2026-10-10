@@ -111,6 +111,17 @@ Figure: `country_mean_temperature.png`.
 
 ---
 
+## Statistical inference (notebook 04)
+
+Supplementary inference on the same Kyiv series and holdout forecast:
+
+- **Winter DJF (2024–25 vs 2025–26):** Raw means differ strongly (~1.3°C vs −5.5°C; Welch *p* ≈ 1.6×10⁻¹³), but observation hours barely overlap between winters (2024–25 ≈ 11–13h; 2025–26 ≈ 8–10h). OLS `temperature_celsius ~ C(winter) + C(obs_hour)` still estimates Winter 2025–26 about **7.5°C** below 2024–25 (*p* < 0.001), with winter and hour partially confounded.
+- **Forecast error uncertainty:** Bootstrap (B = 5000) on holdout absolute errors for Ridge gives MAE **2.474°C** with a 95% percentile CI **[2.122, 2.911]°C** (one-step MAE on this 80/20 split; *n*<sub>test</sub> = 173).
+- **Weather OLS:** `temperature_celsius ~ humidity + pressure_mb + wind_kph + precip_mm` on 863 Kyiv rows; **R² ≈ 0.63**; all slopes significant at α = 0.05. **Durbin–Watson ≈ 0.51** indicates strong residual serial correlation on time-ordered rows.
+- **Time series:** ADF on temperature levels (*p* ≈ 0.30) does not reject a unit root at α = 0.05; ACF decays slowly; PACF spikes at lag 1. **Ljung–Box** on Ridge holdout residuals: significant at lag **10** (*p* ≈ 0.019), marginal at lag **20** (*p* ≈ 0.062)—some autocorrelation remains after the lag model.
+
+---
+
 ## Limitations and future work
 
 - **Single-city forecast** depth trades off against global multi-series modeling (hierarchical models, per-city ensembles).
@@ -122,10 +133,10 @@ Figure: `country_mean_temperature.png`.
 
 ## Reproducibility
 
-Code is organized in Jupyter notebooks (`01_cleaning_and_eda`, `02_forecasting`, `03_advanced_analyses`), with dependencies in `requirements.txt` and instructions in the repository `README.md`. The Kaggle CSV is excluded from version control; reviewers download `GlobalWeatherRepository.csv` into `data/raw/`.
+Code is organized in Jupyter notebooks (`01_cleaning_and_eda`, `02_forecasting`, `03_advanced_analyses`, `04_statistical_inference`), with dependencies in `requirements.txt` and instructions in the repository `README.md`. The Kaggle CSV is excluded from version control; reviewers download `GlobalWeatherRepository.csv` into `data/raw/`.
 
 ---
 
 ## Conclusion
 
-The project delivers an advanced assessment workflow: **time-ordered holdout evaluation**, transparent cleaning, multiple forecast benchmarks with an ensemble, and extended analyses on anomalies, feature importance, air quality, and geography. The main quantitative result is **day-ahead forecasting at ~2.5°C MAE**, marginally better than persistence, using lag-based Ridge regression on holdout data, with clear documentation of what worked, what failed (seasonal naive), and what should improve next.
+The project delivers an advanced assessment workflow: **time-ordered holdout evaluation**, transparent cleaning, multiple forecast benchmarks with an ensemble, extended analyses on anomalies, feature importance, air quality, and geography, plus **formal inference** (winter comparison, bootstrap MAE interval, weather OLS, and time-series diagnostics). The main quantitative result is **day-ahead forecasting at ~2.5°C MAE**, marginally better than persistence, using lag-based Ridge regression on holdout data, with clear documentation of what worked, what failed (seasonal naive), and what should improve next.
