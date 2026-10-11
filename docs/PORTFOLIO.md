@@ -3,7 +3,8 @@
 The case study lives in the [portfolio](https://github.com/ArepaMan/portfolio) repo:
 
 - `content/projects/weather-trend-forecasting.mdx`
-- Thumbnails and gallery PNGs under `public/images/projects/weather-*.png`
+- `content/projects/weather-databricks-pipeline.mdx` (companion pipeline case study)
+- Thumbnails and gallery PNGs under `public/images/projects/weather-*.png` and `weather-databricks-*.png`
 
 ## Refresh figures after re-running notebooks
 

@@ -18,9 +18,11 @@ Analysis and forecasting on the Kaggle [**Global Weather Repository**](https://w
 
 Full narrative, metrics, and report bullets: [`reports/REPORT_NOTES.md`](reports/REPORT_NOTES.md).
 
-Assessment requirements: [`docs/ASSESSMENT.md`](docs/ASSESSMENT.md).
+Assessment requirements: [`docs/ASSESSMENT.md`](docs/ASSESSMENT.md). Submission checklist: [`docs/SUBMISSION.md`](docs/SUBMISSION.md).
 
 Portfolio case study and figure sync: [`docs/PORTFOLIO.md`](docs/PORTFOLIO.md).
+
+**Related pipeline (same dataset):** [weather-databricks-pipeline](https://github.com/ArepaMan/weather-databricks-pipeline) — medallion ETL, DQ, and dashboard in Databricks SQL.
 
 ---
 
@@ -97,7 +99,7 @@ Run in order; select kernel **Python (weather-assessment)**:
 3. **`notebooks/03_advanced_analyses.ipynb`** — anomalies, feature importance, air quality, geo charts  
 4. **`notebooks/04_statistical_inference.ipynb`** — winter hypothesis tests, bootstrap MAE CI, weather OLS, ADF/ACF/PACF, Ljung–Box on Ridge residuals  
 
-Guide for notebook 04: [`docs/GUIDE_04_STATISTICAL_INFERENCE.md`](docs/GUIDE_04_STATISTICAL_INFERENCE.md).
+Notebook 04 reference: [`docs/notebook-04-inference.md`](docs/notebook-04-inference.md).
 
 Figures are written to `reports/` when you run the savefig cells.
 
@@ -111,15 +113,6 @@ Figures are written to `reports/` when you run the savefig cells.
 - **Anomalies:** Rolling 30-day median/MAD robust z (threshold 3.5); Isolation Forest on temp + precip (2% contamination).
 - **Statistical inference (nb04):** Welch / OLS on DJF winters with hour controls; bootstrap percentile CI for holdout Ridge MAE; multivariate OLS (`humidity`, `pressure_mb`, `wind_kph`, `precip_mm`); ADF/ACF/PACF on levels; `acorr_ljungbox` on holdout one-step Ridge residuals (`scipy`, `statsmodels`).
 - **Limitations:** Kyiv observation-hour drift; Kyiv 2026-08-17 test-window snapshot; country means use **≥100 rows/country**; mixed-language labels; correlations ≠ causation; time-ordered rows violate i.i.d. OLS assumptions (Durbin–Watson ≈ 0.5 in weather OLS).
-
----
-
-## Submission (PM Accelerator)
-
-- Public GitHub repo (or private with access for `community@pmaccelerator.io`, `hr@pmaccelerator.io`)
-- This README + `requirements.txt`
-- Report or slides including **PM Accelerator mission** ([pmaccelerator.io](https://pmaccelerator.io))
-- 1–2 minute demo video (code + outputs)
 
 ---
 
